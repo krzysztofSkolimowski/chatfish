@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /Users/krzysztofskolimowski/projects/chatfish && go vet ./... 2>&1 || true"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '$CLAUDE_TOOL_INPUT' | grep -qE 'rm -rf|git push --force|git reset --hard|drop table|truncate' && echo '{\"decision\":\"block\",\"reason\":\"Destructive command requires explicit user confirmation\"}' || exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
