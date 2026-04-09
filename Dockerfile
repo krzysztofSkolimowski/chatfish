@@ -1,4 +1,4 @@
-FROM golang:1.24-alpine AS builder
+FROM golang:1.24 AS builder
 
 WORKDIR /app
 COPY go.mod ./
@@ -6,7 +6,7 @@ RUN go mod download
 COPY . .
 RUN go build -o chatfish .
 
-FROM alpine:3.21
+FROM debian:bookworm-slim
 
 WORKDIR /app
 COPY --from=builder /app/chatfish .

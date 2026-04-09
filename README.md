@@ -39,6 +39,30 @@ graph TD
 | `scoring` | Build prompt from context, call LLM, rank candidates |
 | `api` | HTTP layer tying everything together |
 
+## Development
+
+```bash
+# Run locally
+go run .
+
+# Run tests
+go test ./...
+
+# Build binary
+go build -o chatfish .
+```
+
+```bash
+# Build Docker image
+docker build -t chatfish .
+
+# Run container
+docker run -p 8080:8080 chatfish
+
+# Test the server
+curl localhost:8080/ping
+```
+
 ## Stack
 
 - **Backend**: Go
