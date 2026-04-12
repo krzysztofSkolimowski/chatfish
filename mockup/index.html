@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chatfish — Mockup</title>
+  <title>Chatfish — Mockups</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -11,612 +11,113 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #1c2733;
       color: #e0e0e0;
-      height: 100vh;
-      display: flex;
-      overflow: hidden;
+      min-height: 100vh;
+      padding: 48px 32px;
     }
 
-    /* ── Sidebar ── */
-    .sidebar {
-      width: 270px;
-      background: #17212b;
-      border-right: 1px solid #0d1821;
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
+    header {
+      margin-bottom: 48px;
     }
-    .sidebar-header {
-      padding: 14px 16px;
-      font-size: 18px;
-      font-weight: 600;
-      border-bottom: 1px solid #0d1821;
-      flex-shrink: 0;
-    }
-    .chat-list {
-      overflow-y: auto;
-      flex: 1;
-    }
-    .chat-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 16px;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .chat-item.active { background: #2b5278; }
-    .chat-item:hover:not(.active) { background: #1f2e3d; }
-
-    /* Avatar — shows photo if available, else initials */
-    .avatar {
-      width: 46px; height: 46px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 15px; flex-shrink: 0;
-      overflow: hidden;
-      background: #2b5278;
-    }
-    .avatar img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-
-    .chat-info { flex: 1; overflow: hidden; }
-    .chat-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .chat-preview { font-size: 12px; color: #8a9bb0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
-
-    /* ── Main chat area ── */
-    .chat-area {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
-    }
-
-    /* ── CHATFISH: Score bar (chess.com style) ── */
-    .score-bar-container {
-      width: 40px;
-      background: #17212b;
-      border-right: 1px solid #0d1821;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 12px 0;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-    .score-display {
-      font-size: 11px;
+    header h1 {
+      font-size: 28px;
       font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-    .score-track {
-      flex: 1;
-      width: 18px;
-      background: #0d1821;
-      border-radius: 9px;
-      position: relative;
-      overflow: hidden;
-    }
-    .score-fill {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      border-radius: 9px;
-      transition: height 0.7s cubic-bezier(0.4, 0, 0.2, 1),
-                  background 0.7s ease;
-    }
-    .score-zero-line {
-      position: absolute;
-      top: 50%; left: 0; right: 0;
-      height: 2px;
-      background: #2b5278;
-      transform: translateY(-50%);
-      z-index: 2;
-    }
-    .score-label {
-      font-size: 9px;
-      color: #4a5a6a;
-      font-weight: 600;
-    }
-
-    /* ── Chat ── */
-    .chat-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .chat-header {
-      padding: 12px 16px;
-      background: #17212b;
-      border-bottom: 1px solid #0d1821;
+      color: #fff;
       display: flex;
       align-items: center;
       gap: 10px;
-      flex-shrink: 0;
     }
-    .chat-header .avatar { width: 38px; height: 38px; font-size: 13px; }
-    .chat-header-info .name { font-size: 15px; font-weight: 600; }
-    .chat-header-info .status { font-size: 12px; color: #8a9bb0; }
-
-    .messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .message {
-      max-width: 68%;
-      padding: 8px 12px;
-      border-radius: 12px;
+    header p {
+      margin-top: 6px;
       font-size: 14px;
-      line-height: 1.4;
+      color: #8a9bb0;
     }
-    .message.incoming {
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
       background: #17212b;
       border: 1px solid #1f2e3d;
-      align-self: flex-start;
-      border-bottom-left-radius: 4px;
+      border-radius: 12px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, background 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
-    .message.outgoing {
-      background: #2b5278;
-      align-self: flex-end;
-      border-bottom-right-radius: 4px;
-    }
-    .message .time {
-      font-size: 10px;
-      color: #8a9bb0;
-      margin-top: 4px;
-      text-align: right;
+    .card:hover {
+      border-color: #4db8ff;
+      background: #1f2e3d;
     }
 
-    /* ── Suggestions ── */
-    .suggestions-strip {
-      background: #0f1923;
-      border-top: 1px solid #2b5278;
-      padding: 8px 12px;
-      flex-shrink: 0;
+    .card-icon {
+      font-size: 28px;
     }
-    .suggestions-label {
-      font-size: 10px;
-      color: #4db8ff;
-      font-weight: 700;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
     }
-    .suggestions-label::before { content: "🐟"; font-size: 12px; }
-    .suggestions-row { display: flex; gap: 8px; flex-wrap: wrap; }
-    .suggestion-chip {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: #17212b;
-      border: 1px solid #2b5278;
-      border-radius: 20px;
-      padding: 6px 12px;
+    .card-desc {
       font-size: 13px;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-      user-select: none;
+      color: #8a9bb0;
+      line-height: 1.5;
     }
-    .suggestion-chip:hover { background: #2b5278; border-color: #4db8ff; }
-    .suggestion-chip:active { background: #3a6a9a; }
-    .chip-delta {
-      font-size: 11px; font-weight: 700;
-      padding: 2px 6px; border-radius: 10px;
-      background: #0d1821;
-    }
-    .chip-delta.positive { color: #4caf82; }
-    .chip-delta.neutral  { color: #f0a500; }
-    .chip-delta.negative { color: #e05555; }
-
-    /* ── Input ── */
-    .input-bar {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px;
-      background: #17212b;
-      border-top: 1px solid #0d1821;
-      flex-shrink: 0;
-    }
-    .input-bar input {
-      flex: 1;
-      background: #1c2733;
-      border: 1px solid #2b5278;
+    .card-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
       border-radius: 20px;
-      padding: 9px 16px;
-      color: #e0e0e0; font-size: 14px; outline: none;
+      background: #2b5278;
+      color: #4db8ff;
+      margin-top: 4px;
+      width: fit-content;
     }
-    .input-bar input::placeholder { color: #4a5a6a; }
-    .input-bar button {
-      width: 36px; height: 36px; border-radius: 50%;
-      border: none; background: #2b5278; color: #fff;
-      cursor: pointer; font-size: 16px;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s;
+
+    /* Placeholder card for future mockups */
+    .card.placeholder {
+      border-style: dashed;
+      opacity: 0.4;
+      pointer-events: none;
     }
-    .input-bar button:hover { background: #3a6a9a; }
+    .card.placeholder .card-title { color: #8a9bb0; }
   </style>
 </head>
 <body>
 
-  <div class="sidebar">
-    <div class="sidebar-header">Chatfish 🐟</div>
-    <div class="chat-list" id="chat-list"></div>
-  </div>
+  <header>
+    <h1>🐟 Chatfish — Mockups</h1>
+    <p>UI prototypes and feature mockups</p>
+  </header>
 
-  <div class="chat-area">
-    <div class="score-bar-container">
-      <div class="score-label">+5</div>
-      <div class="score-display" id="score-display">0.0</div>
-      <div class="score-track">
-        <div class="score-fill" id="score-fill"></div>
-        <div class="score-zero-line"></div>
-      </div>
-      <div class="score-label">−5</div>
+  <div class="grid">
+
+    <a class="card" href="chat-overlay/index.html">
+      <div class="card-icon">💬</div>
+      <div class="card-title">Chat Overlay</div>
+      <div class="card-desc">Telegram Web overlay showing AI reply suggestions and a Stockfish-style conversation score bar.</div>
+      <div class="card-tag">Browser Extension</div>
+    </a>
+
+    <div class="card placeholder">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Score Details</div>
+      <div class="card-desc">Coming soon</div>
     </div>
 
-    <div class="chat-main">
-      <div class="chat-header" id="chat-header"></div>
-      <div class="messages" id="messages"></div>
-      <div class="suggestions-strip">
-        <div class="suggestions-label">CHATFISH SUGGESTIONS</div>
-        <div class="suggestions-row" id="suggestions"></div>
-      </div>
-      <div class="input-bar">
-        <button>😊</button>
-        <input type="text" id="msg-input" placeholder="Wiadomość" />
-        <button>🎤</button>
-      </div>
+    <div class="card placeholder">
+      <div class="card-icon">⚙️</div>
+      <div class="card-title">Settings Panel</div>
+      <div class="card-desc">Coming soon</div>
     </div>
+
   </div>
-
-  <script>
-    const chats = [
-      {
-        name: "Motylek",
-        initials: "M",
-        color: "#9b4f7a",
-        photo: "photos/1.png",
-        status: "online",
-        score: 2.1,
-        messages: [
-          { dir: "incoming", text: "okej więc obejrzałam", time: "19:11" },
-          { dir: "incoming", text: "ten film co polecałeś", time: "19:11" },
-          { dir: "outgoing", text: "i???", time: "19:12" },
-          { dir: "incoming", text: "no", time: "19:13" },
-          { dir: "incoming", text: "płakałam 😭 nie spodziewałam się takiego końca serio", time: "19:13" },
-          { dir: "outgoing", text: "MÓWIŁEM", time: "19:13" },
-          { dir: "incoming", text: "dobra dobra masz rację", time: "19:15" },
-          { dir: "incoming", text: "tym razem", time: "19:15" },
-          { dir: "outgoing", text: "zapisuję tę wiadomość 😎", time: "19:16" },
-          { dir: "incoming", text: "nie bądź taki xd", time: "19:17" },
-          { dir: "incoming", text: "ale poważnie następnym razem oglądamy razem coś, chcę się zemścić dobrym filmem", time: "19:18" },
-        ],
-        suggestions: [
-          { text: "haha dobra, tym razem ty wybierasz 🎬 kiedy?", delta: +0.9 },
-          { text: "jestem za, piątek?", delta: +0.5 },
-          { text: "ok", delta: -0.6 },
-        ]
-      },
-      {
-        name: "Myszka",
-        initials: "My",
-        color: "#7a4f2e",
-        photo: "photos/2.png",
-        status: "ostatnio widziana o 13:22",
-        score: -0.8,
-        messages: [
-          { dir: "incoming", text: "hej muszę ci cos powiedziec", time: "12:58" },
-          { dir: "incoming", text: "ale przysiegasz ze nikomu nie powiesz", time: "12:58" },
-          { dir: "outgoing", text: "no jasne co sie stało", time: "12:59" },
-          { dir: "incoming", text: "weszłam dziś na zebranie z szefem", time: "13:00" },
-          { dir: "incoming", text: "i miałam głośnik włączony na maksa", time: "13:00" },
-          { dir: "incoming", text: "z jonas brothers 😭😭😭", time: "13:00" },
-          { dir: "outgoing", text: "HAHAHAHAHA", time: "13:01" },
-          { dir: "outgoing", text: "to jest najlepsza rzecz jaką słyszałem w tym tygodniu 😂😂", time: "13:01" },
-          { dir: "incoming", text: "błagam cię", time: "13:02" },
-          { dir: "incoming", text: "ja tu umieram a ty się śmiejesz", time: "13:02" },
-          { dir: "outgoing", text: "okej okej przepraszam 😂 ale serio która piosenka", time: "13:03" },
-        ],
-        suggestions: [
-          { text: "hej szef pewnie już zapomniał, serio 😊 głowa do góry", delta: +1.1 },
-          { text: "okej już nie pytam o piosenkę 😄 ale wszystko ok?", delta: +0.6 },
-          { text: "hahaha sorry nie mogę przestać 😂 która piosenka?", delta: -1.4 },
-        ]
-      },
-      {
-        name: "Kotek",
-        initials: "K",
-        color: "#6b4c9a",
-        photo: "photos/3.png",
-        status: "online",
-        score: 3.4,
-        messages: [
-          { dir: "incoming", text: "hej masz plany w sobotę?", time: "12:30" },
-          { dir: "outgoing", text: "nic konkretnego, a co?", time: "12:33" },
-          { dir: "incoming", text: "jest taki targ śniadaniowy tu niedaleko mnie", time: "12:34" },
-          { dir: "incoming", text: "podobno mega", time: "12:34" },
-          { dir: "incoming", text: "chciałam wyskoczyć jak będzie ładna pogoda", time: "12:34" },
-          { dir: "outgoing", text: "brzmi dobrze, o której myślisz?", time: "12:36" },
-          { dir: "incoming", text: "koło 10?", time: "12:36" },
-          { dir: "incoming", text: "jest tam budka z naleśnikami z nutellą i owocami serio polecam", time: "12:37" },
-          { dir: "outgoing", text: "naleśniki z nutellą to wystarczający argument żeby wstać o 7 😄", time: "12:38" },
-          { dir: "incoming", text: "haha dobra to do soboty 😊", time: "12:39" },
-        ],
-        suggestions: [
-          { text: "do soboty! wyślij mi adres jak będziesz mogła 📍", delta: +1.2 },
-          { text: "tak, będę punktualnie 😊", delta: +0.5 },
-          { text: "okej 👍", delta: -0.8 },
-        ]
-      },
-      {
-        name: "Świnka",
-        initials: "Ś",
-        color: "#2e7d4f",
-        photo: "photos/4.png",
-        status: "online",
-        score: -1.6,
-        messages: [
-          { dir: "incoming", text: "próbowałam zrobić ten przepis co mi wczoraj wysłałeś", time: "19:48" },
-          { dir: "outgoing", text: "i jak wyszło??", time: "19:50" },
-          { dir: "incoming", text: "no", time: "19:51" },
-          { dir: "incoming", text: "nie do końca", time: "19:51" },
-          { dir: "outgoing", text: "co to znaczy nie do końca 😬", time: "19:52" },
-          { dir: "incoming", text: "włączyłam alarm przeciwpożarowy w całym bloku", time: "19:53" },
-          { dir: "incoming", text: "sąsiadka z trzeciego piętra przyszła sprawdzić czy żyję", time: "19:53" },
-          { dir: "outgoing", text: "serio?? jak to możliwe że makaronu nie umiałaś ugotować", time: "19:55" },
-          { dir: "incoming", text: "no hej to był skomplikowany przepis", time: "19:56" },
-          { dir: "incoming", text: "nieważne zamawiamy pizzę?", time: "19:56" },
-        ],
-        suggestions: [
-          { text: "haha zamawiamy 😂 jaki adres? i pepperoni czy 4 sery?", delta: +1.4 },
-          { text: "tak, zamawiam — ale następnym razem ja gotuję 👨‍🍳", delta: +0.7 },
-          { text: "no i po co był ten przepis skoro i tak pizza 🙄", delta: -1.8 },
-        ]
-      },
-      {
-        name: "Rybka",
-        initials: "R",
-        color: "#1a6b7a",
-        photo: "photos/5.png",
-        status: "online",
-        score: 1.3,
-        messages: [
-          { dir: "incoming", text: "byłeś kiedyś na wspinaczce?", time: "16:10" },
-          { dir: "outgoing", text: "raz", time: "16:11" },
-          { dir: "outgoing", text: "skończyło się tak ze utknąłem w połowie ściany i udawałem że tak miało być", time: "16:11" },
-          { dir: "incoming", text: "😂😂😂", time: "16:12" },
-          { dir: "incoming", text: "to klasyczne", time: "16:12" },
-          { dir: "incoming", text: "ja chodzę co tydzień na siłowni wspinaczkowej, mogę cię zabrać", time: "16:13" },
-          { dir: "outgoing", text: "to zaproszenie czy wyzwanie 😏", time: "16:14" },
-          { dir: "incoming", text: "trochę jedno i drugie", time: "16:15" },
-          { dir: "incoming", text: "dajesz radę?", time: "16:15" },
-        ],
-        suggestions: [
-          { text: "jak nie dam rady to przynajmniej będę się ładnie przewracał przy tobie 😄 kiedy idziesz?", delta: +1.1 },
-          { text: "jestem za! w tym tygodniu?", delta: +0.7 },
-          { text: "haha może, zobaczymy 😅", delta: -0.3 },
-        ]
-      },
-      {
-        name: "Zajączek",
-        initials: "Za",
-        color: "#7a6b1a",
-        photo: "photos/6.png",
-        status: "ostatnio widziana o 11:05",
-        score: 0.4,
-        messages: [
-          { dir: "incoming", text: "hej, masz jakieś ulubione miasto w europie?", time: "10:28" },
-          { dir: "outgoing", text: "Lizbona", time: "10:30" },
-          { dir: "incoming", text: "o serio?? ja właśnie szukam hotelu na maj tam 😮", time: "10:31" },
-          { dir: "incoming", text: "jakies polecenia?", time: "10:31" },
-          { dir: "outgoing", text: "musisz wejść na Alfamę o zachodzie słońca, to obowiązkowe", time: "10:33" },
-          { dir: "outgoing", text: "i pastel de nata w Pastéis de Belém, tam jest kolejka ale warto", time: "10:33" },
-          { dir: "incoming", text: "notuję notuję 👀", time: "10:34" },
-          { dir: "incoming", text: "byłeś tam sam?", time: "10:34" },
-          { dir: "outgoing", text: "niestety tak", time: "10:36" },
-        ],
-        suggestions: [
-          { text: "ale to błąd który chętnie naprawię przy okazji 😄 kiedy lecisz?", delta: +1.2 },
-          { text: "mogę ci zrobić całą listę miejsc jeśli chcesz", delta: +0.4 },
-          { text: "tak, sam", delta: -0.9 },
-        ]
-      },
-      {
-        name: "Biedronka",
-        initials: "Bi",
-        color: "#3a2e7a",
-        photo: "photos/7.png",
-        status: "online",
-        score: 4.1,
-        messages: [
-          { dir: "outgoing", text: "no i jak ci było wczoraj?", time: "09:04" },
-          { dir: "incoming", text: "pytasz jakbyś nie wiedział 😏", time: "09:07" },
-          { dir: "outgoing", text: "chcę żebyś powiedziała sama", time: "09:08" },
-          { dir: "incoming", text: "hmmm", time: "09:09" },
-          { dir: "incoming", text: "było... nieźle 😄", time: "09:10" },
-          { dir: "outgoing", text: "nieźle. okej. wrócimy do tego.", time: "09:10" },
-          { dir: "incoming", text: "haha no dobra no dobra", time: "09:11" },
-          { dir: "incoming", text: "było bardzo fajnie 😊", time: "09:11" },
-          { dir: "incoming", text: "powtórzymy?", time: "09:12" },
-        ],
-        suggestions: [
-          { text: "jak najszybciej — jutro wieczór? 😄", delta: +1.3 },
-          { text: "zdecydowanie tak, tym razem ja wybieram miejsce", delta: +0.9 },
-          { text: "myślę że tak 😊", delta: +0.1 },
-        ]
-      },
-      {
-        name: "Miśka",
-        initials: "Mi",
-        color: "#7a1a4f",
-        photo: "photos/8.png",
-        status: "ostatnio widziana o 20:45",
-        score: -2.3,
-        messages: [
-          { dir: "incoming", text: "hej!", time: "20:01" },
-          { dir: "outgoing", text: "hej co słychać", time: "20:08" },
-          { dir: "incoming", text: "spoko 😊 skąd jesteś?", time: "20:09" },
-          { dir: "outgoing", text: "z warszawy, a ty?", time: "20:15" },
-          { dir: "incoming", text: "o ja też! super 😄 z jakiej dzielnicy?", time: "20:16" },
-          { dir: "outgoing", text: "mokotów", time: "20:28" },
-          { dir: "incoming", text: "a fajnie, ja ursynów", time: "20:29" },
-          { dir: "incoming", text: "lubisz warszawę?", time: "20:29" },
-          { dir: "outgoing", text: "tak, fajne miasto", time: "20:41" },
-          { dir: "incoming", text: "no tak 😅", time: "20:44" },
-        ],
-        suggestions: [
-          { text: "hej, sorry że tak drętwo piszę — jaka jest twoja ulubiona część warszawy?", delta: +1.8 },
-          { text: "bardziej od miasta to lubię Wisłę wieczorem 🌊 byłaś na bulwarach?", delta: +1.3 },
-          { text: "tak, dużo się tu dzieje 😊", delta: -0.7 },
-        ]
-      },
-      {
-        name: "Lisek",
-        initials: "Li",
-        color: "#1a4f3a",
-        photo: "photos/9.png",
-        status: "online",
-        score: 1.8,
-        messages: [
-          { dir: "incoming", text: "czytałeś ostatnio coś ciekawego?", time: "20:00" },
-          { dir: "outgoing", text: "właśnie skończyłem Mistrza i Małgorzatę", time: "20:02" },
-          { dir: "incoming", text: "serio??", time: "20:02" },
-          { dir: "incoming", text: "to moja ulubiona książka w ogóle 😱", time: "20:02" },
-          { dir: "outgoing", text: "no naprawdę?? który rozdział ci się najbardziej podobał?", time: "20:04" },
-          { dir: "incoming", text: "Woland na balu, bez dwóch zdań", time: "20:05" },
-          { dir: "incoming", text: "a ty?", time: "20:05" },
-          { dir: "outgoing", text: "Piłat, te dialogi są niesamowite", time: "20:06" },
-          { dir: "incoming", text: "okej to jest dobry znak że mamy ten sam gust 😄", time: "20:07" },
-        ],
-        suggestions: [
-          { text: "bardzo dobry 😊 co teraz czytasz?", delta: +0.9 },
-          { text: "może powinniśmy to omówić przy kawie — masz jakieś miejsce w warszawie? ☕", delta: +1.3 },
-          { text: "haha może 😄", delta: -0.2 },
-        ]
-      },
-      {
-        name: "Wróbelek",
-        initials: "W",
-        color: "#4f1a7a",
-        photo: "photos/10.png",
-        status: "ostatnio widziana o 17:33",
-        score: 0.9,
-        messages: [
-          { dir: "incoming", text: "hej", time: "17:00" },
-          { dir: "incoming", text: "twój opis na profilu to \"lubię muzykę i podróże\"", time: "17:00" },
-          { dir: "incoming", text: "to chyba każdy? 😄", time: "17:00" },
-          { dir: "outgoing", text: "hahaha no dobra masz rację 😂", time: "17:02" },
-          { dir: "outgoing", text: "co chciałabyś żebym napisał", time: "17:02" },
-          { dir: "incoming", text: "cokolwiek prawdziwego", time: "17:03" },
-          { dir: "incoming", text: "coś co cię wyróżnia", time: "17:03" },
-          { dir: "outgoing", text: "buduję aplikację która ocenia na bieżąco czy rozmowa idzie dobrze czy źle 😄", time: "17:05" },
-          { dir: "incoming", text: "...czekaj to serio?", time: "17:06" },
-          { dir: "incoming", text: "to jest albo bardzo fajne albo trochę przerażające, jeszcze nie wiem 😂", time: "17:07" },
-        ],
-        suggestions: [
-          { text: "serio 😄 i ta rozmowa aktualnie idzie dobrze, btw", delta: +1.1 },
-          { text: "bardzo serio — chcesz zobaczyć jak działa?", delta: +0.8 },
-          { text: "haha trochę obu 😏", delta: +0.3 },
-        ]
-      },
-    ];
-
-    function avatarHTML(chat, size) {
-      if (chat.photo) {
-        return `<div class="avatar" style="width:${size}px;height:${size}px">
-                  <img src="${chat.photo}" alt="${chat.name}" />
-                </div>`;
-      }
-      return `<div class="avatar" style="background:${chat.color};width:${size}px;height:${size}px;font-size:${size < 40 ? 13 : 15}px">
-                ${chat.initials}
-              </div>`;
-    }
-
-    function renderScoreBar(score) {
-      const clamped = Math.max(-5, Math.min(5, score));
-      const fillPct  = 50 + (clamped / 5) * 45;
-      const fill     = document.getElementById('score-fill');
-      const display  = document.getElementById('score-display');
-      fill.style.height = fillPct + '%';
-      if (clamped >= 0) {
-        fill.style.background = 'linear-gradient(to top, #27ae60, #4caf82)';
-        display.style.color   = '#4caf82';
-        display.textContent   = '+' + clamped.toFixed(1);
-      } else {
-        fill.style.background = 'linear-gradient(to top, #c0392b, #e05555)';
-        display.style.color   = '#e05555';
-        display.textContent   = clamped.toFixed(1);
-      }
-    }
-
-    function deltaClass(d)  { return d >= 0.4 ? 'positive' : d >= 0 ? 'neutral' : 'negative'; }
-    function deltaLabel(d)  { return (d >= 0 ? '+' : '') + d.toFixed(1); }
-
-    function render(idx) {
-      const chat = chats[idx];
-
-      document.getElementById('chat-header').innerHTML = `
-        ${avatarHTML(chat, 38)}
-        <div class="chat-header-info">
-          <div class="name">${chat.name}</div>
-          <div class="status">${chat.status}</div>
-        </div>
-      `;
-
-      const msgBox = document.getElementById('messages');
-      msgBox.innerHTML = chat.messages.map(m => `
-        <div class="message ${m.dir}">
-          ${m.text}
-          <div class="time">${m.time}</div>
-        </div>
-      `).join('');
-      msgBox.scrollTop = msgBox.scrollHeight;
-
-      document.getElementById('suggestions').innerHTML = chat.suggestions.map(s => `
-        <div class="suggestion-chip" onclick="sendSuggestion(this, '${s.text.replace(/'/g, "\\'")}')">
-          ${s.text}
-          <span class="chip-delta ${deltaClass(s.delta)}">${deltaLabel(s.delta)}</span>
-        </div>
-      `).join('');
-
-      renderScoreBar(chat.score);
-      document.getElementById('msg-input').value = '';
-    }
-
-    function buildSidebar() {
-      const list = document.getElementById('chat-list');
-      list.innerHTML = chats.map((chat, idx) => `
-        <div class="chat-item${idx === 0 ? ' active' : ''}" onclick="switchChat(this, ${idx})">
-          ${avatarHTML(chat, 46)}
-          <div class="chat-info">
-            <div class="chat-name">${chat.name}</div>
-            <div class="chat-preview">${chat.messages.at(-1).text}</div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function switchChat(el, idx) {
-      document.querySelectorAll('.chat-item').forEach(i => i.classList.remove('active'));
-      el.classList.add('active');
-      render(idx);
-    }
-
-    function sendSuggestion(chip, text) {
-      document.getElementById('msg-input').value = text;
-      document.getElementById('msg-input').focus();
-      chip.style.borderColor = '#4caf82';
-      setTimeout(() => { chip.style.borderColor = '#2b5278'; }, 600);
-    }
-
-    buildSidebar();
-    render(0);
-  </script>
 
 </body>
 </html>
