@@ -1,0 +1,13 @@
+baseURL = "/"
+languageCode = "en-us"
+title = "Chatfish"
+theme = "book"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[params]
+  BookTheme = "dark"
+  BookToC = false
+  BookSearch = true
+  BookRepo = "https://github.com/krzysztofSkolimowski/chatfish"
