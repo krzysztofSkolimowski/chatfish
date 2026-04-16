@@ -18,5 +18,5 @@ Chatfish is a Telegram integration that runs AI analysis on your conversations i
 
 ## Explore
 
-- [Mockups](/mockups) — UI prototypes and feature mockups
-- [Docs](/docs) — Architecture, design decisions, and internals
+- [Mockups]({{< ref "/mockups" >}}) — UI prototypes and feature mockups
+- [Docs]({{< ref "/docs" >}}) — Architecture, design decisions, and internals
