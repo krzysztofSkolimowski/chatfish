@@ -1,0 +1,11 @@
+{
+  "name": "chatfish-site-tests",
+  "private": true,
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "wait-on": "^7.2.0"
+  }
+}
