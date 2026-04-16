@@ -1,6 +1,7 @@
 ---
 title: "Chatfish"
 type: docs
+layout: landing
 ---
 
 # 🐟 Chatfish
