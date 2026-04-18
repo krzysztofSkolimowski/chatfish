@@ -13,21 +13,26 @@ The `site/` directory uses [Quartz v4](https://quartz.jzhao.xyz/) to publish a w
 ```
 chatfish/
 ├── .github/workflows/
-│   ├── backend-ci.yml     # calls scripts/backend-*.sh — triggers on backend/**, scripts/**
-│   ├── pages.yml          # Quartz build + GitHub Pages deploy — triggers on site/**, wiki/**
-│   └── site-sanity.yml    # calls scripts/site-test.sh — triggers on site/**, wiki/**
+│   ├── backend-ci.yml     # calls scripts/ci/backend-*.sh — triggers on backend/**, scripts/ci/**
+│   ├── pages.yml          # calls scripts/ci/site-build.sh — triggers on site/**, wiki/**
+│   └── site-sanity.yml    # calls scripts/ci/site-test.sh — triggers on site/**, wiki/**
 ├── backend/               # Go application
 │   ├── Dockerfile
 │   ├── go.mod
 │   └── main.go
-├── scripts/               # Shared scripts (local + CI). Output → scripts/out/ (gitignored)
-│   ├── backend-test.sh
-│   ├── backend-vet.sh
-│   ├── docker-build.sh
-│   ├── site-build.sh
-│   ├── site-test.sh
-│   ├── trigger-ci.sh      # gh workflow run <workflow>
-│   └── ci-status.sh       # gh run list
+├── scripts/
+│   ├── _lib.sh            # sourced by all scripts — sets REPO, tees output locally
+│   ├── ci/                # called directly from GitHub Actions
+│   │   ├── backend-test.sh
+│   │   ├── backend-vet.sh
+│   │   ├── backend-lint.sh
+│   │   ├── site-build.sh
+│   │   ├── site-test.sh
+│   │   └── docker-build.sh
+│   ├── dev/               # local developer tools
+│   │   ├── run-ci.sh      # run all ci/ scripts locally
+│   │   └── ci-status.sh   # fetch job results for HEAD commit via gh
+│   └── out/               # gitignored — output files written by scripts
 ├── wiki/                  # Obsidian vault — all wiki/docs/mockup content (Markdown + assets)
 │   ├── index.md
 │   ├── docs/
@@ -44,25 +49,39 @@ chatfish/
 
 ## Scripts (source of truth — used locally and in CI)
 
-All scripts live in `scripts/`, write output to `scripts/out/<name>.txt` via `tee`, and exit non-zero on failure. **Always run a script rather than constructing ad-hoc shell commands.** After running, read `scripts/out/<name>.txt` to review results.
+**Never construct ad-hoc shell commands.** Always use a script. CI scripts write output to `scripts/out/<name>.txt`; read that file to review results.
+
+### After finishing any work
+
+1. Run `bash scripts/dev/run-ci.sh` — executes all `ci/` scripts locally and writes an executive summary to `scripts/out/run-ci.txt`. Read that file first.
+2. If anything failed, the summary contains `FAIL <script> → scripts/out/<script>.txt`. Read that file for the full output.
+3. After pushing, wait for CI then run `bash scripts/dev/ci-status.sh` — fetches job-level results for HEAD from GitHub. On failure it includes the failed job logs inline. Read `scripts/out/ci-status.txt`.
+
+### CI scripts (`scripts/ci/`) — also called from GitHub Actions
 
 | Script | What it does |
 |---|---|
-| `scripts/backend-test.sh` | `go test -race ./...` |
-| `scripts/backend-vet.sh` | `go vet` + `gofmt` check |
-| `scripts/docker-build.sh` | `docker build -t chatfish ./backend` |
-| `scripts/site-build.sh` | `npm install` + `quartz build` |
-| `scripts/site-test.sh` | Build + serve + Playwright smoke tests |
-| `scripts/trigger-ci.sh [backend\|pages\|site-sanity]` | Trigger a GitHub Actions workflow via `gh` |
-| `scripts/ci-status.sh [workflow]` | List recent CI runs via `gh` |
+| `scripts/ci/backend-test.sh` | `go test -race ./...` |
+| `scripts/ci/backend-vet.sh` | `go vet` + `gofmt` check |
+| `scripts/ci/backend-lint.sh` | `golangci-lint run` |
+| `scripts/ci/site-build.sh` | `npm ci` + `quartz build` |
+| `scripts/ci/site-test.sh` | Build + serve + Playwright smoke tests |
+| `scripts/ci/docker-build.sh` | `docker build -t chatfish ./backend` |
+
+### Dev scripts (`scripts/dev/`) — local only
+
+| Script | What it does |
+|---|---|
+| `scripts/dev/run-ci.sh` | Run all `ci/` scripts; write pass/fail index to `scripts/out/run-ci.txt` |
+| `scripts/dev/ci-status.sh` | Fetch job results for HEAD commit via `gh`; include failed logs inline |
 
 ### One-off commands not covered by scripts
 ```bash
-cd backend && go run .                        # Run dev server on :8080
-cd backend && gofmt -w .                      # Auto-format (fix, not check)
-docker run -p 8080:8080 chatfish             # Run built image
-curl localhost:8080/ping                      # Health check
-cd site && npx quartz build -d ../wiki --serve  # Quartz dev server
+cd backend && go run .                           # Run dev server on :8080
+cd backend && gofmt -w .                         # Auto-format (fix, not check)
+docker run -p 8080:8080 chatfish                # Run built image
+curl localhost:8080/ping                         # Health check
+cd site && npx quartz build -d ../wiki --serve   # Quartz dev server
 ```
 
 ## Automation
