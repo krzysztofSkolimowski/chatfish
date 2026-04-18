@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
       - "site/**"
+      - "wiki/**"
       - ".github/workflows/site-sanity.yml"
   pull_request:
     paths:
       - "site/**"
+      - "wiki/**"
 
 jobs:
   sanity:
@@ -32,7 +34,7 @@ jobs:
         working-directory: site
 
       - name: Build site
-        run: npx quartz build
+        run: npx quartz build -d ../wiki
         working-directory: site
 
       - name: Start server

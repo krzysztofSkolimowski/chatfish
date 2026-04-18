@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "site/**"
+      - "wiki/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -35,7 +36,7 @@ jobs:
         working-directory: site
 
       - name: Build
-        run: npx quartz build
+        run: npx quartz build -d ../wiki
         working-directory: site
 
       - name: Upload Pages artifact

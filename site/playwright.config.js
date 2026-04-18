@@ -11,7 +11,7 @@ export default defineConfig({
 
   webServer: {
     // Quartz dev server — builds then serves on port 8080
-    command: "npx quartz build --serve",
+    command: "npx quartz build -d ../wiki --serve",
     url: BASE_URL,
     reuseExistingServer: !!process.env.BASE_URL,
     timeout: 120_000,

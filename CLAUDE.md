@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Chatfish** is a Go application that reads Telegram conversations, generates reply suggestions, and scores them — like "Stockfish for chat". A browser extension captures conversation data, posts it to a Go backend, which builds context and calls an LLM to rank candidate replies.
 
-The `site/` directory uses [Quartz v4](https://quartz.jzhao.xyz/) to publish a wiki and mockups to GitHub Pages. The wiki follows the [Karpathy LLM Wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) — raw sources are fed to an LLM pipeline that maintains interconnected Markdown pages in `site/content/`.
+The `site/` directory uses [Quartz v4](https://quartz.jzhao.xyz/) to publish a wiki and mockups to GitHub Pages. The wiki follows the [Karpathy LLM Wiki pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) — raw sources are fed to an LLM pipeline that maintains interconnected Markdown pages in `wiki/`.
 
 ## Repository Structure
 
@@ -14,20 +14,20 @@ The `site/` directory uses [Quartz v4](https://quartz.jzhao.xyz/) to publish a w
 chatfish/
 ├── .github/workflows/
 │   ├── backend-ci.yml     # Go: test, vet, docker  — triggers on backend/**
-│   ├── pages.yml          # Quartz build + GitHub Pages deploy — triggers on site/**
-│   └── site-sanity.yml    # Playwright smoke tests — triggers on site/**
+│   ├── pages.yml          # Quartz build + GitHub Pages deploy — triggers on site/**, wiki/**
+│   └── site-sanity.yml    # Playwright smoke tests — triggers on site/**, wiki/**
 ├── backend/               # Go application
 │   ├── Dockerfile
 │   ├── go.mod
 │   └── main.go
-└── site/                  # Quartz v4 — GitHub Pages (wiki, mockups)
+├── wiki/                  # Obsidian vault — all wiki/docs/mockup content (Markdown + assets)
+│   ├── index.md
+│   ├── docs/
+│   └── mockups/
+└── site/                  # Quartz v4 — GitHub Pages publisher (do not add content here)
     ├── quartz.config.ts   # Quartz configuration (baseUrl, theme, plugins)
     ├── quartz.layout.ts   # Page layout components
     ├── quartz/            # Quartz framework source (do not edit)
-    ├── content/           # All wiki/docs/mockup content (Markdown + assets)
-    │   ├── index.md
-    │   ├── docs/
-    │   └── mockups/
     ├── tests/             # Playwright smoke tests
     │   └── sanity.spec.js
     ├── playwright.config.js
@@ -57,8 +57,8 @@ curl localhost:8080/ping   # Health check
 ```bash
 cd site
 npm install                # Install dependencies (first time, or after adding deps)
-npx quartz build --serve   # Dev server at http://localhost:8080
-npx quartz build           # Build to site/public/
+npx quartz build -d ../wiki --serve   # Dev server at http://localhost:8080
+npx quartz build -d ../wiki           # Build to site/public/
 
 npx playwright test        # Run smoke tests (starts Quartz server automatically)
 ```
@@ -71,8 +71,8 @@ npx playwright test        # Run smoke tests (starts Quartz server automatically
 
 **GitHub Actions**:
 - `backend/**` push → `backend-ci.yml`: test, vet, format check, docker build
-- `site/**` push → `pages.yml`: Quartz build + deploy to GitHub Pages
-- `site/**` push → `site-sanity.yml`: Quartz build + Playwright smoke tests
+- `site/**` or `wiki/**` push → `pages.yml`: Quartz build + deploy to GitHub Pages
+- `site/**` or `wiki/**` push → `site-sanity.yml`: Quartz build + Playwright smoke tests
 
 ## Architecture
 
