@@ -6,6 +6,7 @@ on:
     paths:
       - "site/**"
       - "wiki/**"
+      - "scripts/ci/site-*.sh"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -31,13 +32,8 @@ jobs:
           cache: "npm"
           cache-dependency-path: site/package-lock.json
 
-      - name: Install dependencies
-        run: npm install
-        working-directory: site
-
       - name: Build
-        run: npx quartz build -d ../wiki
-        working-directory: site
+        run: bash scripts/ci/site-build.sh
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

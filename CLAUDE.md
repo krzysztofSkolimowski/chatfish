@@ -13,13 +13,21 @@ The `site/` directory uses [Quartz v4](https://quartz.jzhao.xyz/) to publish a w
 ```
 chatfish/
 ├── .github/workflows/
-│   ├── backend-ci.yml     # Go: test, vet, docker  — triggers on backend/**
+│   ├── backend-ci.yml     # calls scripts/backend-*.sh — triggers on backend/**, scripts/**
 │   ├── pages.yml          # Quartz build + GitHub Pages deploy — triggers on site/**, wiki/**
-│   └── site-sanity.yml    # Playwright smoke tests — triggers on site/**, wiki/**
+│   └── site-sanity.yml    # calls scripts/site-test.sh — triggers on site/**, wiki/**
 ├── backend/               # Go application
 │   ├── Dockerfile
 │   ├── go.mod
 │   └── main.go
+├── scripts/               # Shared scripts (local + CI). Output → scripts/out/ (gitignored)
+│   ├── backend-test.sh
+│   ├── backend-vet.sh
+│   ├── docker-build.sh
+│   ├── site-build.sh
+│   ├── site-test.sh
+│   ├── trigger-ci.sh      # gh workflow run <workflow>
+│   └── ci-status.sh       # gh run list
 ├── wiki/                  # Obsidian vault — all wiki/docs/mockup content (Markdown + assets)
 │   ├── index.md
 │   ├── docs/
@@ -34,33 +42,27 @@ chatfish/
     └── package.json
 ```
 
-## Commands
+## Scripts (source of truth — used locally and in CI)
 
-### Backend (Go)
+All scripts live in `scripts/`, write output to `scripts/out/<name>.txt` via `tee`, and exit non-zero on failure. **Always run a script rather than constructing ad-hoc shell commands.** After running, read `scripts/out/<name>.txt` to review results.
+
+| Script | What it does |
+|---|---|
+| `scripts/backend-test.sh` | `go test -race ./...` |
+| `scripts/backend-vet.sh` | `go vet` + `gofmt` check |
+| `scripts/docker-build.sh` | `docker build -t chatfish ./backend` |
+| `scripts/site-build.sh` | `npm install` + `quartz build` |
+| `scripts/site-test.sh` | Build + serve + Playwright smoke tests |
+| `scripts/trigger-ci.sh [backend\|pages\|site-sanity]` | Trigger a GitHub Actions workflow via `gh` |
+| `scripts/ci-status.sh [workflow]` | List recent CI runs via `gh` |
+
+### One-off commands not covered by scripts
 ```bash
-cd backend
-go run .                   # Run locally (HTTP server on :8080)
-go build -o chatfish .     # Build binary
-go test -race ./...        # Run all tests (matches CI)
-go vet ./...               # Vet
-gofmt -l .                 # Check formatting (CI fails on unformatted files)
-gofmt -w .                 # Auto-format
-```
-
-```bash
-docker build -t chatfish ./backend
-docker run -p 8080:8080 chatfish
-curl localhost:8080/ping   # Health check
-```
-
-### Site (Quartz + Playwright)
-```bash
-cd site
-npm install                # Install dependencies (first time, or after adding deps)
-npx quartz build -d ../wiki --serve   # Dev server at http://localhost:8080
-npx quartz build -d ../wiki           # Build to site/public/
-
-npx playwright test        # Run smoke tests (starts Quartz server automatically)
+cd backend && go run .                        # Run dev server on :8080
+cd backend && gofmt -w .                      # Auto-format (fix, not check)
+docker run -p 8080:8080 chatfish             # Run built image
+curl localhost:8080/ping                      # Health check
+cd site && npx quartz build -d ../wiki --serve  # Quartz dev server
 ```
 
 ## Automation

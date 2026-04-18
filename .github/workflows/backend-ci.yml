@@ -4,46 +4,40 @@ on:
   push:
     paths:
       - "backend/**"
+      - "scripts/ci/backend-*.sh"
       - ".github/workflows/backend-ci.yml"
   pull_request:
     branches: [main]
     paths:
       - "backend/**"
+      - "scripts/ci/backend-*.sh"
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
     container:
       image: golang:1.26
-
-    defaults:
-      run:
-        working-directory: backend
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Test
-        run: go test -race ./...
+        run: bash scripts/ci/backend-test.sh
+      - name: Vet & format
+        run: bash scripts/ci/backend-vet.sh
 
-      - name: Vet
-        run: go vet ./...
-
-      - name: Check formatting
-        run: |
-          unformatted=$(gofmt -l .)
-          if [ -n "$unformatted" ]; then
-            echo "The following files are not formatted:"
-            echo "$unformatted"
-            exit 1
-          fi
+  lint:
+    runs-on: ubuntu-latest
+    container:
+      image: golangci/golangci-lint:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint
+        run: bash scripts/ci/backend-lint.sh
 
   docker:
     runs-on: ubuntu-latest
-    needs: test
-
+    needs: [test, lint]
     steps:
       - uses: actions/checkout@v4
-
       - name: Build Docker image
-        run: docker build -t chatfish ./backend
+        run: bash scripts/ci/docker-build.sh
