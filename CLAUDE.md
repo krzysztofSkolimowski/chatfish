@@ -27,8 +27,7 @@ chatfish/
     ├── content/           # All wiki/docs/mockup content (Markdown + assets)
     │   ├── index.md
     │   ├── docs/
-    │   ├── mockups/
-    │   └── previews/      # Static mockup HTML files served as-is
+    │   └── mockups/
     ├── tests/             # Playwright smoke tests
     │   └── sanity.spec.js
     ├── playwright.config.js
