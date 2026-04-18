@@ -15,44 +15,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: "latest"
-          extended: true
-
-      - name: Build site
-        run: hugo --minify
-        working-directory: site
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
           cache-dependency-path: site/package-lock.json
 
-      - name: Install Playwright
-        run: npm ci
+      - name: Install dependencies
+        run: npm install
         working-directory: site
 
-      - name: Install browsers
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
         working-directory: site
 
-      - name: Start Hugo server (serves pre-built output)
-        run: hugo server --port 1313 --disableFastRender &
+      - name: Build site
+        run: npx quartz build
+        working-directory: site
+
+      - name: Start server
+        run: npx serve public -l 8080 &
         working-directory: site
 
       - name: Wait for server
-        run: npx wait-on http://localhost:1313 --timeout 30000
+        run: npx wait-on http://localhost:8080 --timeout 30000
         working-directory: site
 
       - name: Smoke test
         run: npx playwright test
         working-directory: site
         env:
-          BASE_URL: "http://localhost:1313"
+          BASE_URL: "http://localhost:8080"

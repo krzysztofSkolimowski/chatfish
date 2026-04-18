@@ -1,5 +1,5 @@
 // @ts-check
-const { test, expect } = require("@playwright/test");
+import { test, expect } from "@playwright/test";
 
 test("homepage loads", async ({ page }) => {
   await page.goto("/");
@@ -8,18 +8,22 @@ test("homepage loads", async ({ page }) => {
 
 test("homepage has navigation", async ({ page }) => {
   await page.goto("/");
-  // Book theme renders a sidebar nav
-  const nav = page.locator("nav, aside");
-  await expect(nav.first()).toBeVisible();
+  const sidebar = page.locator(".sidebar");
+  await expect(sidebar.first()).toBeVisible();
 });
 
 test("docs section loads", async ({ page }) => {
-  const response = await page.goto("/docs/");
+  const response = await page.goto("/docs");
   expect(response?.status()).toBeLessThan(400);
 });
 
 test("mockups section loads", async ({ page }) => {
-  const response = await page.goto("/mockups/");
+  const response = await page.goto("/mockups");
+  expect(response?.status()).toBeLessThan(400);
+});
+
+test("chat overlay mockup loads", async ({ page }) => {
+  const response = await page.goto("/mockups/chat-overlay");
   expect(response?.status()).toBeLessThan(400);
 });
 

@@ -1,20 +1,20 @@
 // @ts-check
-const { defineConfig, devices } = require("@playwright/test");
+import { defineConfig, devices } from "@playwright/test";
 
-const BASE_URL = process.env.BASE_URL || "http://localhost:1313";
+const BASE_URL = process.env.BASE_URL || "http://localhost:8080";
 
-module.exports = defineConfig({
+export default defineConfig({
   testDir: "./tests",
   timeout: 30_000,
   retries: 0,
   reporter: "list",
 
   webServer: {
-    // Hugo dev server — only used locally, CI pre-builds and serves separately
-    command: "hugo server --port 1313 --disableFastRender",
+    // Quartz dev server — builds then serves on port 8080
+    command: "npx quartz build --serve",
     url: BASE_URL,
     reuseExistingServer: !!process.env.BASE_URL,
-    timeout: 60_000,
+    timeout: 120_000,
   },
 
   use: {
