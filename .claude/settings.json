@@ -1,10 +1,7 @@
 {
   "hooks": {
-    // PostToolUse hooks fire after every Edit or Write tool call.
-    // Each script reads the file path from stdin and exits early if it's not in the relevant directory.
     "PostToolUse": [
       {
-        // Run go vet + gofmt check immediately after any backend/ file is edited.
         "matcher": "Edit|Write",
         "hooks": [
           {
@@ -14,7 +11,6 @@
         ]
       },
       {
-        // Remind Claude to Playwright-verify after any site/ file is edited (excludes public/ and tests/).
         "matcher": "Edit|Write",
         "hooks": [
           {
@@ -24,11 +20,8 @@
         ]
       }
     ],
-    // PreToolUse hooks fire before every Bash tool call.
     "PreToolUse": [
       {
-        // Block destructive shell commands (rm -rf, force-push, hard-reset, DDL drops)
-        // and require explicit user confirmation before proceeding.
         "matcher": "Bash",
         "hooks": [
           {
@@ -38,7 +31,6 @@
         ]
       },
       {
-        // Run the full CI suite before any git commit; block the commit if CI fails.
         "matcher": "Bash",
         "hooks": [
           {
@@ -50,11 +42,8 @@
         ]
       }
     ],
-    // Stop hook fires once after Claude finishes each turn.
     "Stop": [
       {
-        // Run the full CI suite at the end of every turn to catch any regressions
-        // before the user switches context. Summary written to scripts/out/run-ci.txt.
         "hooks": [
           {
             "type": "command",
