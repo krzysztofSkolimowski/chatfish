@@ -30,8 +30,8 @@ for script in "$SCRIPTS"/backend-*.sh "$SCRIPTS"/docker-*.sh; do
   pids+=($!)
 done
 
-# Site scripts run sequentially — they share node_modules and port 8080
-for script in "$SCRIPTS"/site-*.sh; do
+# site-test covers site-build (superset), so skip site-build locally
+for script in "$SCRIPTS"/site-test.sh; do
   [[ -f "$script" ]] || continue
   name="$(basename "$script")"
   bash "$script" > /dev/null
