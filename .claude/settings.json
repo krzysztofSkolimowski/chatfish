@@ -1,53 +1,64 @@
 {
   "hooks": {
+    // PostToolUse hooks fire after every Edit or Write tool call.
+    // Each script reads the file path from stdin and exits early if it's not in the relevant directory.
     "PostToolUse": [
       {
+        // Run go vet + gofmt check immediately after any backend/ file is edited.
         "matcher": "Edit|Write",
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.tool_input.file_path // \"\"' | grep -q '/backend/' && bash \"$(git rev-parse --show-toplevel)/scripts/ci/backend-vet.sh\" 2>&1 || exit 0"
+            "command": "bash \"$(git rev-parse --show-toplevel)/scripts/hooks/post-edit-backend-vet.sh\""
           }
         ]
       },
       {
+        // Remind Claude to Playwright-verify after any site/ file is edited (excludes public/ and tests/).
         "matcher": "Edit|Write",
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.tool_input.file_path // \"\"' | { read -r p; echo \"$p\" | grep -q '/site/' && echo \"$p\" | grep -qv '/public/' && echo \"$p\" | grep -qv '/tests/' && echo 'Site content was modified. Before finishing, use the Playwright MCP (mcp__playwright__*) to verify the changes: start the Quartz dev server with `cd site && npx quartz build -d ../wiki --serve`, navigate to the affected pages, and confirm they render correctly.' || exit 0; }"
+            "command": "bash \"$(git rev-parse --show-toplevel)/scripts/hooks/post-edit-site-check.sh\""
           }
         ]
       }
     ],
+    // PreToolUse hooks fire before every Bash tool call.
     "PreToolUse": [
       {
+        // Block destructive shell commands (rm -rf, force-push, hard-reset, DDL drops)
+        // and require explicit user confirmation before proceeding.
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "echo '$CLAUDE_TOOL_INPUT' | grep -qE 'rm -rf|git push --force|git reset --hard|drop table|truncate' && echo '{\"decision\":\"block\",\"reason\":\"Destructive command requires explicit user confirmation\"}' || exit 0"
+            "command": "bash \"$(git rev-parse --show-toplevel)/scripts/hooks/pre-bash-block-destructive.sh\""
           }
         ]
       },
       {
+        // Run the full CI suite before any git commit; block the commit if CI fails.
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "cmd=$(jq -r '.tool_input.command // \"\"'); echo \"$cmd\" | grep -q 'git commit' || exit 0; bash \"$(git rev-parse --show-toplevel)/scripts/dev/run-ci.sh\" || echo '{\"decision\":\"block\",\"reason\":\"CI failed — fix errors before committing. See scripts/out/run-ci.txt for details.\"}'",
+            "command": "bash \"$(git rev-parse --show-toplevel)/scripts/hooks/pre-bash-ci-before-commit.sh\"",
             "timeout": 600,
             "statusMessage": "Running CI before commit..."
           }
         ]
       }
     ],
+    // Stop hook fires once after Claude finishes each turn.
     "Stop": [
       {
+        // Run the full CI suite at the end of every turn to catch any regressions
+        // before the user switches context. Summary written to scripts/out/run-ci.txt.
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$(git rev-parse --show-toplevel)/scripts/dev/run-ci.sh\"",
+            "command": "bash \"$(git rev-parse --show-toplevel)/scripts/hooks/stop-run-ci.sh\"",
             "timeout": 600,
             "statusMessage": "Running CI scripts..."
           }

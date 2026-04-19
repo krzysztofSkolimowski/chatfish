@@ -75,6 +75,16 @@ chatfish/
 | `scripts/dev/run-ci.sh` | Run all `ci/` scripts; write pass/fail index to `scripts/out/run-ci.txt` |
 | `scripts/dev/ci-status.sh` | Fetch job results for HEAD commit via `gh`; include failed logs inline |
 
+### Hook scripts (`scripts/hooks/`) — invoked by Claude Code hooks
+
+| Script | Hook | What it does |
+|---|---|---|
+| `scripts/hooks/post-edit-backend-vet.sh` | PostToolUse Edit\|Write | Run `backend-vet.sh` when a `backend/` file is edited |
+| `scripts/hooks/post-edit-site-check.sh` | PostToolUse Edit\|Write | Remind Claude to Playwright-verify when a `site/` file is edited |
+| `scripts/hooks/pre-bash-block-destructive.sh` | PreToolUse Bash | Block destructive commands (`rm -rf`, force-push, hard-reset, DDL drops) |
+| `scripts/hooks/pre-bash-ci-before-commit.sh` | PreToolUse Bash | Run full CI before any `git commit`; block on failure |
+| `scripts/hooks/stop-run-ci.sh` | Stop | Run full CI after Claude finishes each turn |
+
 ### One-off commands not covered by scripts
 ```bash
 cd backend && go run .                           # Run dev server on :8080
