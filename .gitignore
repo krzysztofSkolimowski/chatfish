@@ -32,5 +32,5 @@ go.work.sum
 scripts/out/
 
 # Editor/IDE
-# .idea/
-# .vscode/
+.idea/
+.vscode/

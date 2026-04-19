@@ -1,0 +1,39 @@
+---
+title: {{ title }}
+type: persona
+created: {{ created }}
+related: {{ related | default([]) | tojson }}
+---
+
+# {{ title }}
+
+## Who They Are
+
+{{ who }}
+
+## Goals
+
+{% for goal in goals %}
+- {{ goal }}
+{% endfor %}
+
+## Pain Points
+
+{% for pain in pain_points %}
+- {{ pain }}
+{% endfor %}
+
+## How Chatfish Helps
+
+{# Use [[WikiLink]] to reference specific features that address this persona's needs #}
+{{ how_chatfish_helps }}
+
+## Related
+
+{% if related %}
+{% for slug in related %}
+- [[{{ slug }}]]
+{% endfor %}
+{% else %}
+(none)
+{% endif %}

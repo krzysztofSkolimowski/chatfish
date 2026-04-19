@@ -1,0 +1,40 @@
+---
+title: {{ title }}
+type: feature
+status: {{ status | default('idea') }}
+created: {{ created }}
+updated: {{ updated }}
+related: {{ related | default([]) | tojson }}
+---
+
+# {{ title }}
+
+## Problem
+
+{# Use [[WikiLink]] to reference personas, knowledge, or choices inline #}
+{{ problem }}
+
+## Proposed Solution
+
+{# Use [[WikiLink]] to reference related features, choices, or knowledge inline #}
+{{ solution }}
+
+## Open Questions
+
+{% if open_questions %}
+{% for q in open_questions %}
+- {{ q }}
+{% endfor %}
+{% else %}
+- (none yet)
+{% endif %}
+
+## Related
+
+{% if related %}
+{% for slug in related %}
+- [[{{ slug }}]]
+{% endfor %}
+{% else %}
+(none)
+{% endif %}

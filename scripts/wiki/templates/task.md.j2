@@ -1,0 +1,37 @@
+---
+title: {{ title }}
+type: task
+status: {{ status | default('todo') }}
+priority: {{ priority | default('medium') }}
+created: {{ created }}
+updated: {{ updated }}
+related: {{ related | default([]) | tojson }}
+---
+
+# {{ title }}
+
+## What
+
+{# Use [[WikiLink]] to reference the feature or choice this task implements #}
+{{ what }}
+
+## Why
+
+{# Use [[WikiLink]] to reference knowledge, personas, or choices that motivate this task #}
+{{ why }}
+
+## Acceptance Criteria
+
+{% for criterion in acceptance_criteria %}
+{{ loop.index }}. {{ criterion }}
+{% endfor %}
+
+## Related
+
+{% if related %}
+{% for slug in related %}
+- [[{{ slug }}]]
+{% endfor %}
+{% else %}
+(none)
+{% endif %}

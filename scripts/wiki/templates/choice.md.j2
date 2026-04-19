@@ -1,0 +1,46 @@
+---
+title: {{ title }}
+type: choice
+status: {{ status | default('open') }}
+created: {{ created }}
+supersedes: {{ supersedes | default('null') }}
+related: {{ related | default([]) | tojson }}
+---
+
+# {{ title }}
+
+## Context
+
+{# Use [[WikiLink]] to reference features or knowledge that forced this choice #}
+{{ context }}
+
+## Options
+
+{% for option in options %}
+- **{{ option.name }}** — {{ option.summary }}
+{% endfor %}
+
+## What We Chose
+
+{# Use [[WikiLink]] to reference knowledge or personas that informed the decision #}
+{{ chosen }}
+
+## Tradeoffs
+
+{% if tradeoffs %}
+{% for t in tradeoffs %}
+- {{ t }}
+{% endfor %}
+{% else %}
+- (none identified)
+{% endif %}
+
+## Related
+
+{% if related %}
+{% for slug in related %}
+- [[{{ slug }}]]
+{% endfor %}
+{% else %}
+(none)
+{% endif %}
