@@ -81,6 +81,7 @@ chatfish/
 |---|---|---|
 | `scripts/hooks/post-edit-backend-vet.sh` | PostToolUse Edit\|Write | Run `backend-vet.sh` when a `backend/` file is edited |
 | `scripts/hooks/post-edit-site-check.sh` | PostToolUse Edit\|Write | Remind Claude to Playwright-verify when a `site/` file is edited |
+| `scripts/hooks/post-edit-go-mod-tidy.sh` | PostToolUse Edit\|Write | Auto-run `go mod tidy` when `go.mod` or `go.sum` is edited |
 | `scripts/hooks/pre-bash-block-destructive.sh` | PreToolUse Bash | Block destructive commands (`rm -rf`, force-push, hard-reset, DDL drops) |
 | `scripts/hooks/pre-bash-ci-before-commit.sh` | PreToolUse Bash | Run full CI before any `git commit`; block on failure |
 | `scripts/hooks/stop-run-ci.sh` | Stop | Run full CI after Claude finishes each turn |
@@ -98,7 +99,8 @@ cd site && npx quartz build -d ../wiki --serve   # Quartz dev server
 
 **Claude Code hooks** (`.claude/settings.json`):
 - After every `Edit`/`Write` on a `backend/` file → runs `go vet` immediately
-- After every `Edit`/`Write` on a `site/` file (excluding `public/`) → prompts Claude to verify with Playwright MCP before finishing
+- After every `Edit`/`Write` on a `site/` file (excluding `public/`) → prompts Claude to Playwright-verify before finishing
+- After every `Edit`/`Write` on `go.mod`/`go.sum` → auto-runs `go mod tidy`
 
 **GitHub Actions**:
 - `backend/**` push → `backend-ci.yml`: test, vet, format check, docker build

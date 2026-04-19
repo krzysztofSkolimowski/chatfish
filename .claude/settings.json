@@ -18,6 +18,15 @@
             "command": "bash \"$(git rev-parse --show-toplevel)/scripts/hooks/post-edit-site-check.sh\""
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$(git rev-parse --show-toplevel)/scripts/hooks/post-edit-go-mod-tidy.sh\""
+          }
+        ]
       }
     ],
     "PreToolUse": [
