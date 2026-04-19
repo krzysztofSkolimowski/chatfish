@@ -6,20 +6,27 @@ SUMMARY="$REPO/scripts/out/run-ci.txt"
 mkdir -p "$REPO/scripts/out"
 > "$SUMMARY"
 
+names=()
+pids=()
+
+for script in "$SCRIPTS"/*.sh; do
+  names+=("$(basename "$script")")
+  bash "$script" > /dev/null &
+  pids+=($!)
+done
+
 failed=()
 passed=()
 
-for script in "$SCRIPTS"/*.sh; do
-  name=$(basename "$script")
-  echo "=== $name ==="
-  if bash "$script"; then
+for i in "${!names[@]}"; do
+  name="${names[$i]}"
+  if wait "${pids[$i]}"; then
     passed+=("$name")
     echo "ok  $name" >> "$SUMMARY"
   else
     failed+=("$name")
-    echo "FAIL $name → scripts/out/$(basename "$script" .sh).txt" >> "$SUMMARY"
+    echo "FAIL $name → scripts/out/$(basename "$name" .sh).txt" >> "$SUMMARY"
   fi
-  echo ""
 done
 
 echo "" >> "$SUMMARY"
