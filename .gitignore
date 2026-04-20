@@ -34,3 +34,6 @@ scripts/out/
 # Editor/IDE
 .idea/
 .vscode/
+
+# Obsidian vault settings
+wiki/.obsidian/
