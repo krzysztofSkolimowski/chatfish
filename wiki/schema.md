@@ -116,7 +116,6 @@ Goal: take files from `raw/`, classify them, put the content in the right place.
 4. For each page: load template, fill fields from the raw text, write file — do not add ideas not in the source
 5. Update `index.md`, append to `log.md` (mark raw files as processed)
 
-
 ---
 
 ### Compile — synthesise knowledge into tasks

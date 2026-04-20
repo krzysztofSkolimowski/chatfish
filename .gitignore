@@ -34,3 +34,4 @@ scripts/out/
 # Editor/IDE
 .idea/
 .vscode/
+wiki/.obsidian/
