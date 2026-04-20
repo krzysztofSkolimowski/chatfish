@@ -35,3 +35,6 @@ scripts/out/
 .idea/
 .vscode/
 wiki/.obsidian/
+
+# Playwright test artifacts
+site/test-results/
