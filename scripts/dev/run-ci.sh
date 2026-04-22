@@ -2,9 +2,17 @@
 set -uo pipefail
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"
 SCRIPTS="$REPO/scripts/ci"
-SUMMARY="$REPO/scripts/out/run-ci.txt"
 mkdir -p "$REPO/scripts/out"
-> "$SUMMARY"
+rm -f "$REPO/scripts/out"/*.txt   # always start clean
+SUMMARY="$REPO/scripts/out/run-ci.txt"
+
+# CI_SCOPE: "backend" | "site" | "all" (default: "all")
+# Set by callers (e.g. stop hook) to limit which scripts run.
+SCOPE="${CI_SCOPE:-all}"
+[[ "$SCOPE" == "all" || "$SCOPE" == "backend" || "$SCOPE" == "site" ]] \
+  || SCOPE="all"
+
+[[ "$SCOPE" != "all" ]] && echo "[run-ci] scope: $SCOPE" >> "$SUMMARY"
 
 names=()
 pids=()
@@ -22,21 +30,25 @@ record() {
   fi
 }
 
-# Backend + docker scripts run in parallel
-for script in "$SCRIPTS"/backend-*.sh "$SCRIPTS"/docker-*.sh; do
-  [[ -f "$script" ]] || continue
-  names+=("$(basename "$script")")
-  bash "$script" > /dev/null &
-  pids+=($!)
-done
+# Backend + docker scripts run in parallel (skipped when scope=site)
+if [[ "$SCOPE" != "site" ]]; then
+  for script in "$SCRIPTS"/backend-*.sh "$SCRIPTS"/docker-*.sh; do
+    [[ -f "$script" ]] || continue
+    names+=("$(basename "$script")")
+    bash "$script" > /dev/null &
+    pids+=($!)
+  done
+fi
 
-# site-test covers site-build (superset), so skip site-build locally
-for script in "$SCRIPTS"/site-test.sh; do
-  [[ -f "$script" ]] || continue
-  name="$(basename "$script")"
-  bash "$script" > /dev/null
-  record "$name" $?
-done
+# site-test covers site-build (superset), so skip site-build locally (skipped when scope=backend)
+if [[ "$SCOPE" != "backend" ]]; then
+  for script in "$SCRIPTS"/site-test.sh; do
+    [[ -f "$script" ]] || continue
+    name="$(basename "$script")"
+    bash "$script" > /dev/null
+    record "$name" $?
+  done
+fi
 
 # Collect parallel results
 for i in "${!names[@]}"; do
