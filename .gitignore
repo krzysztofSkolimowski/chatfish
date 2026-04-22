@@ -37,3 +37,6 @@ scripts/out/
 
 # Obsidian vault settings
 wiki/.obsidian/
+
+# Playwright MCP logs
+.playwright-mcp/
