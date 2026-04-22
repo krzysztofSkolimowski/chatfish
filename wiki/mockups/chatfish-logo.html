@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Chatfish — Logo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Cool — CORE. Blues carry the brand. */
+    --navy:#00183c;
+    --navy-2:#183c54;
+    --deep-blue:#306c90;
+    --mid-blue:#4890b4;
+    --splash:#78c0d8;
+    --foam:#b4d8d8;
+
+    /* Warm emotion — ranked by frequency of use */
+    --love:#d83060;      /* heartbeat — primary emotional accent */
+    --love-soft:#f7b8c8;
+    --fire:#ef5a2a;      /* passion / fiery orange — secondary */
+    --fire-soft:#ffb38a;
+    --amber:#e8a24a;     /* occasional warm glow only */
+
+    --cream:#f5efe2;
+    --bg:#eadfcb;
+    --ink:#00183c;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;}
+  body{
+    min-height:100vh;
+    padding:56px 40px 80px;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #e1d6bd 0%, transparent 60%),
+      var(--bg);
+  }
+  .wrap{max-width:1200px;margin:0 auto}
+  .eyebrow{text-transform:uppercase;letter-spacing:.28em;font-size:11px;color:#5c6b82;margin-bottom:8px;}
+  h1.title{font-family:'Fraunces',serif;font-weight:800;font-size:44px;letter-spacing:-0.02em;margin:0 0 28px;}
+  h1.title em{color:var(--deep-blue);font-style:italic}
+  h1.title .love{color:var(--love);font-style:normal;font-family:'Bricolage Grotesque',sans-serif}
+  h1.title .fire{color:var(--fire);font-style:normal;font-family:'Bricolage Grotesque',sans-serif}
+
+  .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:28px;}
+  .card{
+    background:var(--cream);
+    border:1px solid rgba(0,24,60,.14);
+    border-radius:22px;
+    padding:28px;position:relative;overflow:hidden;
+  }
+  .card .label{
+    position:absolute;top:16px;left:20px;
+    text-transform:uppercase;letter-spacing:.22em;font-size:10px;color:#7a8598;
+  }
+  .hero{
+    grid-column:1 / -1;padding:40px;
+    display:flex;align-items:center;justify-content:center;
+    min-height:620px;
+    background:
+      radial-gradient(520px 280px at 82% 80%, rgba(239,90,42,.28) 0%, transparent 60%),
+      radial-gradient(420px 220px at 18% 18%, rgba(216,48,96,.22) 0%, transparent 60%),
+      radial-gradient(900px 500px at 50% 40%, #ffffff 0%, transparent 70%),
+      var(--cream);
+  }
+  .hero .stage{position:relative}
+  .hero img{max-width:min(80%, 620px);height:auto;display:block;filter:drop-shadow(0 30px 50px rgba(0,24,60,.18));position:relative;z-index:1}
+  .hero .glow-love{
+    position:absolute;inset:-40px auto auto -60px;
+    width:180px;height:180px;border-radius:999px;
+    background:radial-gradient(circle at 40% 40%, #ffb4c4, var(--love) 70%);
+    filter:blur(4px);opacity:.5;z-index:0;
+  }
+  .hero .glow-fire{
+    position:absolute;inset:auto -60px -40px auto;
+    width:200px;height:200px;border-radius:999px;
+    background:radial-gradient(circle at 40% 40%, #ffd28a, var(--fire) 65%);
+    filter:blur(4px);opacity:.55;z-index:0;
+  }
+
+  .mono{font-family:'Space Grotesk',sans-serif;font-weight:500}
+  .row{display:flex;gap:20px;flex-wrap:wrap}
+  .tile{
+    flex:1 1 240px;border-radius:22px;padding:24px;min-height:220px;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;border:1px solid rgba(0,24,60,.14);
+  }
+  .tile .label{position:absolute;top:14px;left:18px;text-transform:uppercase;letter-spacing:.22em;font-size:10px}
+  .t-cream{background:var(--cream);color:var(--navy)}
+  .t-navy{background:var(--navy);color:#eaf3fb}
+  .t-navy .label{color:#8fb3d4}
+  .t-love{background:var(--love);color:#fff}
+  .t-love .label{color:#ffd1d8}
+  .t-fire{background:linear-gradient(160deg,#ffb38a,#ef5a2a);color:var(--navy)}
+  .t-fire .label{color:#6a2510}
+  .t-splash{background:linear-gradient(160deg,#b4d8d8,#78c0d8);color:var(--navy)}
+
+  .swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+  .sw{border-radius:12px;min-height:96px;display:flex;flex-direction:column;justify-content:space-between;padding:12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;line-height:1.3;position:relative}
+  .sw b{display:block;font-weight:700;font-size:11px}
+  .sw span{opacity:.75;font-size:9.5px}
+  .sw .usage-dot{position:absolute;top:10px;right:10px;font-size:9px;letter-spacing:.1em;opacity:.8;font-weight:700}
+  .row-label{margin-top:16px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#7a8598;display:flex;align-items:center;gap:10px}
+  .row-label .bar{flex:1;height:1px;background:rgba(0,24,60,.12)}
+
+  /* Frequency ladder */
+  .ladder{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+  .ladder .step{display:flex;align-items:center;gap:10px;font-size:12px;color:#3a4a63}
+  .ladder .swatch{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,24,60,.15)}
+  .ladder .track{flex:1;height:6px;border-radius:99px;background:rgba(0,24,60,.08);overflow:hidden}
+  .ladder .fill{height:100%;border-radius:99px}
+  .ladder .pct{width:44px;text-align:right;font-variant-numeric:tabular-nums;color:#7a8598}
+
+  .usage{display:flex;align-items:center;gap:16px;padding:14px 18px;border-radius:14px;background:#fff;border:1px solid rgba(0,24,60,.1)}
+  .usage + .usage{margin-top:10px}
+  .usage.dark{background:var(--navy);color:#eaf3fb;border-color:#001128}
+  .pill{
+    display:inline-flex;align-items:center;gap:8px;
+    border-radius:999px;padding:8px 14px;
+    font-weight:700;font-size:12px;letter-spacing:.04em;
+  }
+  .pill.love{background:var(--love);color:#fff}
+  .pill.fire{background:var(--fire);color:#fff}
+  .pill.blue{background:var(--deep-blue);color:#fff}
+  .pill.amber{background:var(--amber);color:var(--navy)}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--navy);color:#fff;border-radius:14px;padding:12px 18px;
+    font-weight:700;font-size:14px;
+  }
+  .btn .dot{width:8px;height:8px;border-radius:99px;background:var(--love)}
+  .btn.fire{background:var(--fire);color:#fff}
+  .btn.fire .dot{background:#fff}
+  .love-spark{color:var(--love)}
+  .fire-spark{color:var(--fire)}
+
+  .foot{display:flex;justify-content:space-between;gap:12px;margin-top:18px;color:#5c6b82;font-size:12px;}
+
+  .mini-icon{
+    width:44px;height:44px;border-radius:12px;background:var(--navy);
+    background-image:url('chatfish-logo.svg');background-size:160%;background-position:center 35%;
+    border:1px solid #001128;
+  }
+
+  .note{
+    border-radius:14px;padding:14px 16px;font-size:13px;line-height:1.55;
+    background:linear-gradient(90deg, rgba(216,48,96,.08), rgba(239,90,42,.08));
+    border:1px dashed rgba(216,48,96,.35);
+    color:#5a2038;
+  }
+  .note b.love{color:var(--love)}
+  .note b.fire{color:var(--fire)}
+  .note b.amber{color:#9a6a1a}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Brand system · Logo v4 · emotional palette</div>
+  <h1 class="title">chatfish <em>— your AI dating coach</em> · <span class="love">love</span> + <span class="fire">fire</span></h1>
+
+  <div class="grid">
+
+    <!-- HERO -->
+    <div class="card hero">
+      <span class="label">Primary lockup</span>
+      <div class="stage">
+        <div class="glow-love"></div>
+        <div class="glow-fire"></div>
+        <img src="chatfish-logo.svg" alt="Chatfish logo" />
+      </div>
+    </div>
+
+    <!-- Palette -->
+    <div class="card">
+      <span class="label">Palette</span>
+      <div style="padding-top:30px">
+
+        <div class="row-label"><span>Cool — core (most used)</span><span class="bar"></span><span>the blues carry the brand</span></div>
+        <div class="swatches">
+          <div class="sw" style="background:#00183c;color:#eaf3fb"><b>Deep Navy</b><span>#00183C</span></div>
+          <div class="sw" style="background:#306c90;color:#ffffff"><b>Coach Blue</b><span>#306C90</span></div>
+          <div class="sw" style="background:#78c0d8;color:#00183c"><b>Splash</b><span>#78C0D8</span></div>
+          <div class="sw" style="background:#b4d8d8;color:#00183c"><b>Foam</b><span>#B4D8D8</span></div>
+        </div>
+
+        <div class="row-label"><span>Warm — emotion</span><span class="bar"></span><span>ranked by frequency ↓</span></div>
+        <div class="swatches" style="grid-template-columns:repeat(3,1fr)">
+          <div class="sw" style="background:#d83060;color:#fff">
+            <div class="usage-dot">♥ LOVE</div>
+            <div><b>Heartbeat</b><span>#D83060</span></div>
+          </div>
+          <div class="sw" style="background:#ef5a2a;color:#fff">
+            <div class="usage-dot">★ FIRE</div>
+            <div><b>Flame</b><span>#EF5A2A</span></div>
+          </div>
+          <div class="sw" style="background:#e8a24a;color:#3b2208">
+            <div class="usage-dot">☀ GLOW</div>
+            <div><b>Amber</b><span>#E8A24A</span></div>
+          </div>
+        </div>
+
+        <!-- frequency ladder -->
+        <div class="ladder">
+          <div class="step">
+            <div class="swatch" style="background:#306c90"></div>
+            <div style="width:80px">Blues</div>
+            <div class="track"><div class="fill" style="width:95%;background:#306c90"></div></div>
+            <div class="pct">core</div>
+          </div>
+          <div class="step">
+            <div class="swatch" style="background:#d83060"></div>
+            <div style="width:80px">Heartbeat</div>
+            <div class="track"><div class="fill" style="width:55%;background:#d83060"></div></div>
+            <div class="pct">often</div>
+          </div>
+          <div class="step">
+            <div class="swatch" style="background:#ef5a2a"></div>
+            <div style="width:80px">Flame</div>
+            <div class="track"><div class="fill" style="width:32%;background:#ef5a2a"></div></div>
+            <div class="pct">moments</div>
+          </div>
+          <div class="step">
+            <div class="swatch" style="background:#e8a24a"></div>
+            <div style="width:80px">Amber</div>
+            <div class="track"><div class="fill" style="width:14%;background:#e8a24a"></div></div>
+            <div class="pct">rare</div>
+          </div>
+        </div>
+
+        <div class="note" style="margin-top:16px">
+          Blues are home. <b class="love">Heartbeat</b> is our emotional voice — matches, hearts, reactions. <b class="fire">Flame</b> carries passion and urgency — streaks, hot takes, send-it CTAs. <b class="amber">Amber</b> is a rare warm glow — golden-hour illustrations, premium accents.
+        </div>
+      </div>
+    </div>
+
+    <!-- Type -->
+    <div class="card">
+      <span class="label">Type pairing</span>
+      <div style="padding-top:34px">
+        <div style="font-family:'Fraunces',serif;font-style:italic;font-weight:800;font-size:72px;line-height:1;letter-spacing:-.02em;color:#00183c">chat<span style="font-family:'Bricolage Grotesque',sans-serif;font-style:normal;color:#306c90">fish</span></div>
+        <div style="margin-top:8px;font-family:'Space Grotesk';font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:var(--navy)">
+          <span class="love-spark">♥</span> your <b style="color:var(--fire)">ai</b> dating coach <span class="love-spark">♥</span>
+        </div>
+        <div style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div>
+            <div class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.22em;color:#7a8598">Display · italic</div>
+            <div style="font-family:'Fraunces',serif;font-style:italic;font-weight:800;font-size:28px">Fraunces 800 italic</div>
+          </div>
+          <div>
+            <div class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.22em;color:#7a8598">Display · sans</div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:28px">Bricolage 800</div>
+          </div>
+          <div style="grid-column:1 / -1;margin-top:4px">
+            <div class="mono" style="font-size:11px;text-transform:uppercase;letter-spacing:.22em;color:#7a8598">UI & tagline</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:16px">Space Grotesk — <b>buttons, tags, microcopy</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Colorways -->
+    <div class="card" style="grid-column:1 / -1;padding:20px">
+      <span class="label" style="position:relative;top:0;left:0">Colorways</span>
+      <div class="row" style="margin-top:16px">
+        <div class="tile t-cream">
+          <span class="label">On cream</span>
+          <img src="chatfish-logo.svg" alt="" style="max-height:180px"/>
+        </div>
+        <div class="tile t-navy">
+          <span class="label">On navy</span>
+          <img src="chatfish-logo.svg" alt="" style="max-height:180px;filter:brightness(1.1)"/>
+        </div>
+        <div class="tile t-love">
+          <span class="label">Love</span>
+          <img src="chatfish-logo.svg" alt="" style="max-height:180px"/>
+        </div>
+        <div class="tile t-fire">
+          <span class="label">Fire</span>
+          <img src="chatfish-logo.svg" alt="" style="max-height:180px"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- In the wild -->
+    <div class="card" style="grid-column:1 / -1">
+      <span class="label">In the wild</span>
+      <div style="padding-top:30px;display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <div class="usage">
+            <span class="pill love">♥ matched</span>
+            <span class="pill fire">★ on fire · 7-day streak</span>
+            <span class="mono" style="font-size:13px;color:#7a8598;margin-left:auto">love + fire pills</span>
+          </div>
+          <div class="usage">
+            <span class="btn"><span class="dot"></span>Start a match</span>
+            <span class="btn fire"><span class="dot"></span>Send it</span>
+          </div>
+          <div class="usage dark">
+            <span style="font-family:Fraunces;font-style:italic;font-weight:800;font-size:22px">chat<span style="font-family:'Bricolage Grotesque';font-style:normal;color:#78c0d8">fish</span></span>
+            <span class="pill amber" style="margin-left:auto;font-size:10px">☀ pro</span>
+          </div>
+        </div>
+        <div>
+          <div class="usage" style="padding:14px 18px">
+            <div class="mini-icon"></div>
+            <div>
+              <div style="font-family:Fraunces;font-style:italic;font-weight:800;font-size:18px">chatfish <span style="font-family:'Bricolage Grotesque';font-style:normal;color:var(--love)">love</span></div>
+              <div class="mono" style="font-size:12px;color:#7a8598">App icon + sub-brand lockup</div>
+            </div>
+          </div>
+          <div class="usage">
+            <span class="mono" style="font-size:13px">"They replied <span class="love-spark">♥</span> — now <span class="fire-spark">send it ★</span>"</span>
+            <span class="mono" style="font-size:12px;color:#7a8598;margin-left:auto">— coach voice</span>
+          </div>
+          <div class="usage" style="background:linear-gradient(90deg,#fde7ec,#ffd8c4);border-color:rgba(216,48,96,.25)">
+            <span class="mono" style="font-size:13px;color:var(--navy)">— <span class="love-spark">♥</span> YOUR · <b style="color:var(--fire)">AI</b> · DATING · COACH <span class="love-spark">♥</span> —</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    <span>chatfish · logo system v4</span>
+    <span>Blues core · Heartbeat love · Flame passion · Amber rare</span>
+  </div>
+</div>
+</body>
+</html>
