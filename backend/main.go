@@ -11,6 +11,11 @@ type P struct {
 	bar int32
 }
 
+func simpleSumTest(p1, p2 int) int {
+	fmt.Printf("Adding %d and %d\n", p1, p2)
+	return p1 + p2
+}
+
 func main() {
 	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		_, _ = fmt.Fprintln(w, "pong")
